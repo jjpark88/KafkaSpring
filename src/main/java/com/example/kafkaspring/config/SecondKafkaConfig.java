@@ -50,19 +50,37 @@ public class SecondKafkaConfig {
     }
 
     @Bean
-    @Qualifier("secondKafkaListenerContainerFactory")
-    public ProducerFactory<String, Object> secondProducerFactory(KafkaProperties kafkaProperties) {
+    @Qualifier("secondProducerFactory")
+    public ProducerFactory<String, String> secondProducerFactory(KafkaProperties secondKafkaTemplate) {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProperties.getProducer().getKeySerializer());
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kafkaProperties.getProducer().getValueSerializer());
-        props.put(ProducerConfig.ACKS_CONFIG, kafkaProperties.getProducer().getAcks());
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, secondKafkaTemplate.getBootstrapServers());
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, secondKafkaTemplate.getProducer().getKeySerializer());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, secondKafkaTemplate.getProducer().getValueSerializer());
+        props.put(ProducerConfig.ACKS_CONFIG, secondKafkaTemplate.getProducer().getAcks());
         return new DefaultKafkaProducerFactory<>(props);
     }
 
     @Bean
     @Qualifier("secondKafkaTemplate")
-    public KafkaTemplate<String, ?> secondKafkaTemplate(KafkaProperties kafkaProperties) {
-        return new KafkaTemplate<>(secondProducerFactory(kafkaProperties));
+    public KafkaTemplate<String, String> secondKafkaTemplate(@Qualifier("secondKafkaProperties")KafkaProperties secondKafkaTemplate) {
+        return new KafkaTemplate<>(secondProducerFactory(secondKafkaTemplate));
     }
+
+//    @Bean
+//    @Qualifier("secondProducerFactory")
+//    public ProducerFactory<String, String> secondProducerFactory(@Qualifier("secondKafkaProperties") KafkaProperties kafkaProperties) {
+//        Map<String, Object> props = new HashMap<>();
+//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
+//        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProperties.getProducer().getKeySerializer());
+//        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kafkaProperties.getProducer().getValueSerializer());
+//        props.put(ProducerConfig.ACKS_CONFIG, kafkaProperties.getProducer().getAcks());
+//        return new DefaultKafkaProducerFactory<>(props);
+//    }
+
+    // KafkaTemplate Bean 설정
+//    @Bean
+//    @Qualifier("secondKafkaTemplate")
+//    public KafkaTemplate<String, String> secondKafkaTemplate(@Qualifier("secondProducerFactory") ProducerFactory<String, String> producerFactory) {
+//        return new KafkaTemplate<>(producerFactory);
+//    }
 }

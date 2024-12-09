@@ -4,6 +4,8 @@ import com.example.kafkaspring.model.MyMessage;
 import com.example.kafkaspring.producer.BatchProducer;
 import com.example.kafkaspring.producer.MyProducer;
 import com.example.kafkaspring.producer.MySecondProducer;
+import com.example.kafkaspring.producer.SerialProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ public class MyController {
     private final MyProducer myProducer;
     private final MySecondProducer mySecondProducer;
     private final BatchProducer batchProducer;
+    private final SerialProducer serialProducer;
 
     @RequestMapping("/hello")
     String hello() {
@@ -32,6 +35,11 @@ public class MyController {
         batchProducer.sendMessage();
     }
 
+    @PostMapping("/stringSerial")
+    void message3(@RequestBody MyMessage message) throws JsonProcessingException {
+        serialProducer.sendMessage(message);
+    }
+
     @PostMapping("/second-message/{key}")
     void message(
             @PathVariable String key,
@@ -39,6 +47,7 @@ public class MyController {
     ) {
         mySecondProducer.sendMessageWithKey(key, message);
     }
+
 
 
 }

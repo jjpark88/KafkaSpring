@@ -6,6 +6,7 @@ spring:
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
         auto-offset-reset: latest
+        max-poll-records: 25
         properties:
           spring.json.trusted.packages: "*"
           allow.auto.create.topics: false #토픽 자동 생성 막기
@@ -21,6 +22,7 @@ spring:
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         auto-offset-reset: latest
+        max-poll-records: 25
         properties:
           spring.json.trusted.packages: "*"
           allow.auto.create.topics: false #토픽 자동 생성 막기
