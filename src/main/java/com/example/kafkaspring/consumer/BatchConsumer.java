@@ -22,9 +22,9 @@ public class BatchConsumer {
 
         System.out.println("combi2 size: " + records.size());
             System.out.println("combi2: " + records);
-        for (ConsumerRecord<String, String> record : records) {
-            System.out.println(record.topic() + record.value());
-        }
+//        for (ConsumerRecord<String, String> record : records) {
+//            System.out.println(record.topic() + record.value());
+//        }
         // 각 ConsumerRecord에서 파티션 정보 추출
 //        for (ConsumerRecord<String, String> record : records) {
 //            System.out.println("Received message from partition: " + record.partition() + ", offset: " + record.offset());

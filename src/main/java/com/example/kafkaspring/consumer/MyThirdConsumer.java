@@ -17,6 +17,7 @@ import static com.example.kafkaspring.model.Topic.SINGLE_TOPIC;
 
 @Component
 public class MyThirdConsumer {
+//Seial producer 컨슈머
 
 //    private final ObjectMapper objectMapper;
 //
@@ -30,7 +31,7 @@ public class MyThirdConsumer {
         containerFactory = "batchKafkaListenerContainerFactory"
     )
     public void accept(List<ConsumerRecord<String, String>> messages) {
-//     System.out.println(messages);
+     System.out.println(messages);
         ObjectMapper objectMapper = new ObjectMapper();
 
         messages.forEach(message -> {

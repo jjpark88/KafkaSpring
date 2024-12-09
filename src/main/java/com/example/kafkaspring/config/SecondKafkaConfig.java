@@ -17,7 +17,9 @@ import java.util.Map;
 @Configuration
 @EnableKafka
 public class SecondKafkaConfig {
-
+    /*
+         String 값을 던지고 String으로 값을 단순히 받는 테스트 config
+       */
     @Bean
     @Qualifier("secondKafkaProperties")
     @ConfigurationProperties("spring.kafka.string")
@@ -51,7 +53,7 @@ public class SecondKafkaConfig {
 
     @Bean
     @Qualifier("secondProducerFactory")
-    public ProducerFactory<String, String> secondProducerFactory(KafkaProperties secondKafkaTemplate) {
+    public ProducerFactory<String, String> secondProducerFactory(@Qualifier("secondKafkaProperties")KafkaProperties secondKafkaTemplate) {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, secondKafkaTemplate.getBootstrapServers());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, secondKafkaTemplate.getProducer().getKeySerializer());
@@ -60,11 +62,11 @@ public class SecondKafkaConfig {
         return new DefaultKafkaProducerFactory<>(props);
     }
 
-    @Bean
-    @Qualifier("secondKafkaTemplate")
-    public KafkaTemplate<String, String> secondKafkaTemplate(@Qualifier("secondKafkaProperties")KafkaProperties secondKafkaTemplate) {
-        return new KafkaTemplate<>(secondProducerFactory(secondKafkaTemplate));
-    }
+//    @Bean
+//    @Qualifier("secondKafkaTemplate")
+//    public KafkaTemplate<String, String> secondKafkaTemplate(@Qualifier("secondKafkaProperties")KafkaProperties secondKafkaTemplate) {
+//        return new KafkaTemplate<>(secondProducerFactory(secondKafkaTemplate));
+//    }
 
 //    @Bean
 //    @Qualifier("secondProducerFactory")
@@ -78,9 +80,9 @@ public class SecondKafkaConfig {
 //    }
 
     // KafkaTemplate Bean 설정
-//    @Bean
-//    @Qualifier("secondKafkaTemplate")
-//    public KafkaTemplate<String, String> secondKafkaTemplate(@Qualifier("secondProducerFactory") ProducerFactory<String, String> producerFactory) {
-//        return new KafkaTemplate<>(producerFactory);
-//    }
+    @Bean
+    @Qualifier("secondKafkaTemplate")
+    public KafkaTemplate<String, String> secondKafkaTemplate(@Qualifier("secondProducerFactory") ProducerFactory<String, String> producerFactory) {
+        return new KafkaTemplate<>(producerFactory);
+    }
 }

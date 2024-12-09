@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import java.util.HashMap;
@@ -22,6 +23,9 @@ import java.util.Map;
 @EnableKafka
 public class KafkaConfig {
 
+    /*
+       Json으로 값을 던지고 Json으로 값을 단순히 받는 테스트 config
+     */
     @Bean
     @Primary
     @ConfigurationProperties("spring.kafka.json")
@@ -40,6 +44,9 @@ public class KafkaConfig {
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG, "false");
+
+        //수동 커밋 설정 값
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
@@ -50,6 +57,8 @@ public class KafkaConfig {
     ) {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
+        //수동커밋 설정 값
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
       //  factory.setBatchListener(true);
         factory.setConcurrency(1);
 

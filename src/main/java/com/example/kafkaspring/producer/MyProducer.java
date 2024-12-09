@@ -14,8 +14,7 @@ public class MyProducer {
     public void sendMessage(MyMessage myMessage) throws InterruptedException {
         //kafkaTemplate.send("json-topic", String.valueOf(myMessage.getAge()), myMessage);
         for (int i = 1; i <= 3; i++) {
-
-            kafkaTemplate.send("single_listner", "Message combi4" + i);
+            kafkaTemplate.send("single_listner", String.valueOf(myMessage.getAge()), "Message combi4" + i);
             System.out.println("Sent: Message combi4 " + i);
         }
     }
