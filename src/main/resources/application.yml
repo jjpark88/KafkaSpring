@@ -30,4 +30,13 @@ spring:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.apache.kafka.common.serialization.StringSerializer
         acks: 0 #0은 프로듀서가 브로커한테 보내고 신경 안씀, 1은 리더파티션이 응답이 오면 성공했다고 인지, -1은 리더 뿐만아니라 팔로우가 다 되야 다음 메세지 생성
-
+  datasource:
+    url: jdbc:mysql://localhost:3306/jjpark?serverTimezone=Asia/Seoul
+    username: jjpark
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
