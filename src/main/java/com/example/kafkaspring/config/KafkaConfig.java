@@ -28,7 +28,7 @@ public class KafkaConfig {
      */
     @Bean
     @Primary
-    @ConfigurationProperties("spring.kafka.json")
+    @ConfigurationProperties("spring.kafka")
     public KafkaProperties kafkaProperties() {
         return new KafkaProperties();
     }

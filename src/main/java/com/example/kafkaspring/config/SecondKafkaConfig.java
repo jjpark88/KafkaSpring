@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
+import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class SecondKafkaConfig {
        */
     @Bean
     @Qualifier("secondKafkaProperties")
-    @ConfigurationProperties("spring.kafka.string")
+    //@ConfigurationProperties("spring.kafka.string")
     public KafkaProperties secondKafkaProperties() {
         return new KafkaProperties();
     }
@@ -36,6 +37,9 @@ public class SecondKafkaConfig {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, secondKafkaProperties.getConsumer().getValueDeserializer());
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG, "false");
+
+        //수동 커밋 설정 값
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
@@ -47,6 +51,9 @@ public class SecondKafkaConfig {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory);
         factory.setConcurrency(1);
+
+        //수동커밋 설정 값
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
 
         return factory;
     }

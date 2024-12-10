@@ -1,35 +1,43 @@
 spring:
   kafka:
-    json:
-      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
-      consumer:
-        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-        auto-offset-reset: latest
-        properties:
-          spring.json.trusted.packages: "*"
-          allow.auto.create.topics: false #토픽 자동 생성 막기
-      listener:
-        concurrency: 1
-      producer:
-        key-serializer: org.apache.kafka.common.serialization.StringSerializer
-        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-        acks: 1 #0은 프로듀서가 브로커한테 보내고 신경 안씀, 1은 리더파티션이 응답이 오면 성공했다고 인지, -1은 리더 뿐만아니라 팔로우가 다 되야 다음 메세지 생성
-    string:
-      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
-      consumer:
+    bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+    consumer:
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        auto-offset-reset: latest
-        properties:
-          spring.json.trusted.packages: "*"
-          allow.auto.create.topics: false #토픽 자동 생성 막기
-      listener:
-        concurrency: 1
-      producer:
+    producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.apache.kafka.common.serialization.StringSerializer
-        acks: 0 #0은 프로듀서가 브로커한테 보내고 신경 안씀, 1은 리더파티션이 응답이 오면 성공했다고 인지, -1은 리더 뿐만아니라 팔로우가 다 되야 다음 메세지 생성
+        acks: -1
+#    json:
+#      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+#      consumer:
+#        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#        auto-offset-reset: latest
+#        properties:
+#          spring.json.trusted.packages: "*"
+#          allow.auto.create.topics: false #토픽 자동 생성 막기
+#      listener:
+#        concurrency: 1
+#      producer:
+#        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#        acks: 1 #0은 프로듀서가 브로커한테 보내고 신경 안씀, 1은 리더파티션이 응답이 오면 성공했다고 인지, -1은 리더 뿐만아니라 팔로우가 다 되야 다음 메세지 생성
+#    string:
+#      bootstrap-servers: localhost:9092,localhost:9093,localhost:9094
+#      consumer:
+#        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#        value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#        auto-offset-reset: latest
+#        properties:
+#          spring.json.trusted.packages: "*"
+#          allow.auto.create.topics: false #토픽 자동 생성 막기
+#      listener:
+#        concurrency: 1
+#      producer:
+#        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#        value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#        acks: 0 #0은 프로듀서가 브로커한테 보내고 신경 안씀, 1은 리더파티션이 응답이 오면 성공했다고 인지, -1은 리더 뿐만아니라 팔로우가 다 되야 다음 메세지 생성
   datasource:
     url: jdbc:mysql://localhost:3306/jjpark?serverTimezone=Asia/Seoul
     username: jjpark

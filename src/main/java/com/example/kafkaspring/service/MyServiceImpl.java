@@ -4,8 +4,12 @@ import com.example.kafkaspring.data.MyEntity;
 import com.example.kafkaspring.data.MyJpaRepository;
 import com.example.kafkaspring.model.MyModel;
 import com.example.kafkaspring.model.MyModelConverter;
+import com.example.kafkaspring.model.OperationType;
+import com.example.kafkaspring.producer.MyCdcProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +19,7 @@ import java.util.Optional;
 public class MyServiceImpl implements MyService {
 
     private final MyJpaRepository myJpaRepository;
+    private final MyCdcProducer myCdcProducer;
 
     @Override
     public List<MyModel> findAll() {
@@ -29,13 +34,35 @@ public class MyServiceImpl implements MyService {
     }
 
     @Override
+    @Transactional
     public MyModel save(MyModel model) {
+        OperationType operationType = model.getId() == null ? OperationType.CREATE : OperationType.UPDATE;
         MyEntity entity = myJpaRepository.save(MyModelConverter.toEntity(model));
-        return MyModelConverter.toModel(entity);
+        MyModel resultModel = MyModelConverter.toModel(entity);
+        try {
+            myCdcProducer.sendMessage(
+                    MyModelConverter.toMessage(
+                            resultModel.getId(),
+                            resultModel,
+                            operationType
+                    )
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error processing JSON for sendMessage", e);
+        }
+        return resultModel;
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
         myJpaRepository.deleteById(id);
+        try {
+            myCdcProducer.sendMessage(
+                    MyModelConverter.toMessage(id, null, OperationType.DELETE)
+            );
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error processing JSON for sendMessage", e);
+        }
     }
 }
