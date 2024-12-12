@@ -16,7 +16,7 @@ public class MyModel {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static MyModel create(
+    public static MyModel join(
         Integer userId,
         Integer userAge,
         String userName,

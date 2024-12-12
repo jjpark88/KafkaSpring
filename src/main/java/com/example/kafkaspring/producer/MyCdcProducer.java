@@ -15,14 +15,15 @@ public class MyCdcProducer {
 
     CustomObjectMapper objectMapper = new CustomObjectMapper();
 
-    @Qualifier("secondKafkaTemplate")
-    private final KafkaTemplate<String, String> secondKafkaTemplate;
+
+    private final KafkaTemplate<String, String> serialKafkaTemplate;
 
     public void sendMessage(MyCdcMessage message) throws JsonProcessingException {
         String jsonMessage = objectMapper.writeValueAsString(message);
 
-        secondKafkaTemplate.send(
+        serialKafkaTemplate.send(
             Topic.MY_CDC_TOPIC,
+                String.valueOf(message.getId()),
                 jsonMessage
         );
     }

@@ -9,12 +9,12 @@ import static com.example.kafkaspring.model.Topic.MY_SECOND_TOPIC;
 
 @RequiredArgsConstructor
 @Component
-public class MySecondProducer {
+public class CommitProducer {
 
-    @Qualifier("secondKafkaTemplate")
-    private final KafkaTemplate<String, String> secondKafkaTemplate;
+    @Qualifier("serialKafkaTemplate")
+    private final KafkaTemplate<String, String> serialKafkaTemplate;
 
     public void sendMessageWithKey(String key, String message) {
-        secondKafkaTemplate.send(MY_SECOND_TOPIC, key, message);
+        serialKafkaTemplate.send(MY_SECOND_TOPIC, key, message);
     }
 }

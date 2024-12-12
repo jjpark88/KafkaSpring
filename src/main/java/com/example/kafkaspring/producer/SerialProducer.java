@@ -12,19 +12,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class SerialProducer {
 
-    /*
-        second템플릿은 string->string 설정 템플릿
-        json으로 보내도 string으로 변환해서 받고, string으로 보내서 string으로 받기
-        writeValueAsString 이거 쓰면 변환됨
-     */
     ObjectMapper objectMapper = new ObjectMapper();
-    @Qualifier("secondKafkaTemplate")
-    private final KafkaTemplate<String, String> secondKafkaTemplate;
+    @Qualifier("serialKafkaTemplate")
+    private final KafkaTemplate<String, String> serialKafkaTemplate;
 
     public void sendMessage(MyMessage myMessage) throws JsonProcessingException {
 
         String jsonMessage = objectMapper.writeValueAsString(myMessage);
-        System.out.println("test = " + jsonMessage);
-        secondKafkaTemplate.send("serial_topic", jsonMessage);
+        serialKafkaTemplate.send("serial_topic", jsonMessage);
     }
 }

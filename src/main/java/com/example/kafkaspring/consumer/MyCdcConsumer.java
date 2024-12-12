@@ -16,18 +16,14 @@ import static com.example.kafkaspring.model.Topic.MY_CDC_TOPIC;
 public class MyCdcConsumer {
 
     private final CustomObjectMapper objectMapper = new CustomObjectMapper();
-  //  private final ObjectMapper objectMapper = new ObjectMapper();
 
     @KafkaListener(
         topics = { MY_CDC_TOPIC },
         groupId = "cdc-consumer-group",
-        concurrency = "1",
-            containerFactory = "secondKafkaListenerContainerFactory"
-
+        concurrency = "3"
     )
     public void listen(ConsumerRecord<String, String> message, Acknowledgment acknowledgment) throws JsonProcessingException {
         MyCdcMessage myCdcMessage = objectMapper.readValue(message.value(), MyCdcMessage.class);
-       // System.out.println("[Cdc Consumer] " + myCdcMessage.getOperationType() + " Message arrived! (id: " + myCdcMessage.getId() + ") - " + myCdcMessage.getPayload());
         System.out.println("[Cdc Consumer] Message arrived! - " + myCdcMessage.getPayload());
         acknowledgment.acknowledge();
     }

@@ -14,14 +14,20 @@ import static com.example.kafkaspring.model.Topic.*;
 @Component
 public class BatchConsumer {
     @KafkaListener(
-            topics = { BATCH_TOPIC },
-            groupId = "batch-consumer-group", // MyConsumer의 groupId와 반드시 달라야 함!
+            topics = { "batch_topic" },
+            groupId = "batch-consumer-group",
             containerFactory = "batchKafkaListenerContainerFactory"
     )
     public void listenBatch(@Payload List<ConsumerRecord<String, String>> records) {
 
-        System.out.println("combi2 size: " + records.size());
-            System.out.println("combi2: " + records);
+        System.out.println("batcMessage size: " + records.size());
+        System.out.println("batchMessage: " + records);
+
+
+
+
+
+
 //        for (ConsumerRecord<String, String> record : records) {
 //            System.out.println(record.topic() + record.value());
 //        }

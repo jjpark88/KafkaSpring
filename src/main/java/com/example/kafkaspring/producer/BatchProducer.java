@@ -2,6 +2,7 @@ package com.example.kafkaspring.producer;
 
 import com.example.kafkaspring.model.MyMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -9,12 +10,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class BatchProducer {
 
-    private final KafkaTemplate<Object, String> kafkaTemplate;
+    @Qualifier("batchKafkaTemplate")
+    private final KafkaTemplate<String, String> batchKafkaTemplate;
 
     public void sendMessage() {
-        for (int i = 1; i <= 20; i++) {
-            kafkaTemplate.send("batch_test_topic2", "key"+i ,"Message " + i);
-            System.out.println("Sent: Message " + i);
+        for (int i = 1; i <= 5; i++) {
+            batchKafkaTemplate.send("batch_topic","Message " + i);
+            System.out.println("Sent: BatchMessage " + i);
         }
     }
 }
